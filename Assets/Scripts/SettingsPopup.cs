@@ -2,13 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.SocialPlatforms.Impl;
 using UnityEngine.UI;
 public class SettingsPopup : MonoBehaviour
 {
     [SerializeField] GameObject SettingsPanel;
-
+    [SerializeField] Slider volumnBar;
     private void Start()
     {
+        volumnBar.value = PlayerPrefs.GetFloat("Volumn", 1f);
         SettingsPanel.SetActive(false);
     }
 
@@ -27,7 +30,8 @@ public class SettingsPopup : MonoBehaviour
 
     public void ReturnMainMenu()
     {
-        // return to main menu here
+        Controller.score = 0;
+        SceneManager.LoadScene("MainMenu");
     }
 
 }

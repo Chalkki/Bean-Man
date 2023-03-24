@@ -51,7 +51,8 @@ public class Controller : MonoBehaviour
     // detect whether the player starts the game
     private bool startGame;
     [SerializeField] TextMeshProUGUI startCue;
-
+    [SerializeField] TextMeshProUGUI EndGameText;
+    private bool endGame;
     // set up the remaining lives and maximum lives allowed for the player
     private int remainedLives;
     [SerializeField] private TextMeshProUGUI remainedLivesGUI;
@@ -64,6 +65,10 @@ public class Controller : MonoBehaviour
     private bool isSettingsOpen;
     void Start()
     {
+
+        endGame = false;
+        EndGameText.gameObject.SetActive(false);
+
         audioManager = GetComponent<AudioManager>();
         popUP = GetComponent<SettingsPopup>();
         isSettingsOpen = false;
@@ -91,6 +96,7 @@ public class Controller : MonoBehaviour
         frightenTime = 5f - 0.1f *(currentLevel - 1) * 5f;
         Debug.Log($"The current level is {currentLevel} and the frightened Time is {frightenTime}");
         ScoreLabel.text = score.ToString();
+
     }
 
     // Update is called once per frame
@@ -113,6 +119,12 @@ public class Controller : MonoBehaviour
         {
             startGame = true;
             StartGame();
+        }
+
+        if (endGame && Input.GetKeyDown(KeyCode.R))
+        {
+            score = 0;
+            SceneManager.LoadScene("Map");
         }
     }
 
@@ -305,14 +317,23 @@ public class Controller : MonoBehaviour
         }
         else
         {
-            Debug.Log("Game Over, you won!");
+            EndGame("Game Over, you won! You can try again to hit a higher score!");
         }
     }
     private void LostGame()
     {
         Time.timeScale = 0f;
-        Debug.Log("You lost.");
+        EndGame("Try again!");
         PlayerPrefs.SetInt("CurrentLevel", 1);
+    }
+
+
+    private void EndGame(string str)
+    {
+        string endtxt = " Press R to restart.";
+        EndGameText.text = str + endtxt;
+        EndGameText.gameObject.SetActive(true);
+        endGame = true;
     }
     private void OnApplicationQuit()
     {
