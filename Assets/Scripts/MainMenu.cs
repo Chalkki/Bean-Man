@@ -9,4 +9,9 @@ public class MainMenu : MonoBehaviour
     {
         SceneManager.LoadScene("Map");
     }
+
+    public void ExitGame()
+    {
+        Application.Quit();
+    }
 }
